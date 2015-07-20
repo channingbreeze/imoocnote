@@ -1,10 +1,10 @@
 (function($){
     
     // 获取数据的接口
-    var GETCLASSES = 'http://localhost/imoocnote/inter/getClasses.php';
-    var GETCLASSCHAPTER = 'http://localhost/imoocnote/inter/getClassChapter.php';
-    var GETCLASSNOTE = 'http://localhost/imoocnote/inter/getClassNote.php';
-    var ADDNOTE = 'http://localhost/imoocnote/inter/addClassNote.php';
+    var GETCLASSES = 'http://imoocnote.calfnote.com/inter/getClasses.php';
+    var GETCLASSCHAPTER = 'http://imoocnote.calfnote.com/inter/getClassChapter.php';
+    var GETCLASSNOTE = 'http://imoocnote.calfnote.com/inter/getClassNote.php';
+    var ADDNOTE = 'http://imoocnote.calfnote.com/inter/addClassNote.php';
     
     var g_curPage = 1;
     
