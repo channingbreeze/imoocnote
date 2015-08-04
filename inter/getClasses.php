@@ -13,7 +13,7 @@ if(isset($_GET['curPage'])) {
 $count = 6;
 
 $sqlHelper = new SQLHelper();
-$sql = "select * from t_class limit " . (($curPage-1) * $count) . "," . $count;
+$sql = "select * from t_class order by lorder desc, id asc limit " . (($curPage-1) * $count) . "," . $count;
 $arr = $sqlHelper->execute_dql_array($sql);
 
 $sql = "select count(id) as count from t_class";
