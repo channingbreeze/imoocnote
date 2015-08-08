@@ -22,7 +22,8 @@ $total = $sqlHelper->execute_dql_array($sql);
 $res = array();
 $res['curPage'] = $curPage;
 $res['totalCount'] = (int)($total[0]['count'] / $count);
-if($total % $count != 0) {
+
+if($total[0]['count'] % $count != 0) {
     $res['totalCount']++;
 }
 $res['data'] = $arr;
