@@ -101,7 +101,7 @@ if(!isset($_SESSION['user'])) {
 </head>
 <body>
     <div class="banner">
-        <h1>我的慕课笔记本</h1>
+        <h1>我的笔记本</h1>
         <h3>你的指尖，有改变世界的力量</h3>
     </div>
     <!-- 课程列表 -->
