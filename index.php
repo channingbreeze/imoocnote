@@ -73,8 +73,8 @@ if(!isset($_SESSION['user'])) {
             </li>
             {{/each}}
         </ul>
-        <div class="btn" id="takeNoteBtn">
-            <button>记笔记</button>
+        <div class="btn">
+            <button id="takeNoteBtn">记笔记</button>
         </div>
     </script>
     <script id="nodeedit-template" type="text/x-handlebars-template">
