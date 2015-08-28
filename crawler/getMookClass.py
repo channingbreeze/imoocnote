@@ -14,20 +14,24 @@ class GetMookClass:
             -a all refresh, check all the pages and add new classes
         '''
     def run(self):
-        try:
-            opts, args = getopt.getopt(sys.argv[1:], "hea")
-            for op, value in opts:
-                if op == "-h":
-                    self.usage()
-                elif op == "-e":
-                    self.startCrawl()
-                elif op == "-a":
-                    self.startCrawl(1)
-                else:
-                    self.usage()
-        except:
+        if len(sys.argv) == 1:
             self.usage()
+        else:
+            try:
+                opts, args = getopt.getopt(sys.argv[1:], "hea")
+                for op, value in opts:
+                    if op == "-h":
+                        self.usage()
+                    elif op == "-e":
+                        self.startCrawl()
+                    elif op == "-a":
+                        self.startCrawl(1)
+                    else:
+                        self.usage()
+            except:
+                self.usage()
     def startCrawl(self, all=0):
+        self.c.login("http://www.imooc.com/course/list", "http://www.imooc.com/user/login")
         if(all):
             index = 1
             while(self.crawlSinglePage(index)):

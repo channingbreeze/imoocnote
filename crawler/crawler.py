@@ -1,9 +1,30 @@
 # coding=utf-8
+import urllib
 import urllib2
+import cookielib
 import re
 from tClass import TClass
 from tTitle import TTitle
 class Crawler:
+    def login(self, hosturl, loginurl):
+        cl = cookielib.CookieJar()
+        cp = urllib2.HTTPCookieProcessor(cl)
+        opener = urllib2.build_opener(cp)
+        urllib2.install_opener(opener)
+        urllib2.urlopen(hosturl)
+        headers = {
+            'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36',
+            'Referer' : hosturl
+        }
+        postData = {
+            'username' : 'yourusername',
+            'password' : 'yourpassword',
+            'remember' : '1'
+        }
+        postData = urllib.urlencode(postData)
+        request = urllib2.Request(loginurl, postData, headers)
+        content = opener.open(request)
+        return content.read()
     def getClasses(self, url):
         response = urllib2.urlopen(url)
         html = response.read()
@@ -22,7 +43,7 @@ class Crawler:
         return classes
     def getTitles(self, cid, mid):
         url = 'http://www.imooc.com/learn/%d' % (mid)
-        chapterReg = '<div class="learnchapter  learnchapter-active " ><h3><span>-</span><strong><i class="hasOpenOn"></i>(.*?)(\d+)(.*?)</strong></h3>(.*?)</div>'
+        chapterReg = '<div class="chapter chapter-active " ><h3><span>-</span><strong><i class="state-expand"></i>(.*?)(\d+)(.*?)</strong></h3>(.*?)</div>'
         chapterReg = chapterReg.replace(' ', '')
         response = urllib2.urlopen(url)
         html = response.read()
@@ -35,7 +56,7 @@ class Crawler:
             titles.extend(self.getSubTitles(item[3], cid, 0))
         return titles
     def getSubTitles(self, html, cid, pid):
-        titleReg = '<li><a target="_blank" href=\'/([^/]*?)/(\d+)\' class="(?:[a-z]*?)">(\d+)-(\d+) ([^<]*?)\((\d*):(\d*)\)</a></li>|<li><a target="_blank" href=\'/([^/]*?)/(\d+)\' class="(?:[a-z]*?)">(\d+)-(\d+) ([^<]*?)</a></li>'
+        titleReg = '<li>(?:<em class=".*?">.*?</em>)?<a target="_blank" href=\'/([^/]*?)/(\d+)\' class="(?:[a-z]*?)">(\d+)-(\d+) ([^<]*?)\((\d*):(\d*)\)<i class="(?:[a-z-]*?)"></i></a></li>|<li>(?:<em class=".*?">.*?</em>)?<a target="_blank" href=\'/([^/]*?)/(\d+)\' class="(?:[a-z]*?)">(\d+)-(\d+) ([^<]*?)<i class="(?:[a-z-]*?)"></i></a></li>'
         titleReg = titleReg.replace(' ', '')
         html = html.replace(' ', '').replace('\r', '').replace('\n', '').replace('\t', '')
         items = re.findall(titleReg, html, re.S)
@@ -49,12 +70,13 @@ class Crawler:
         return subs
 if __name__ == '__main__':
     c = Crawler()
+    c.login("http://www.imooc.com/course/list", "http://www.imooc.com/user/login")
     classes = c.getClasses('http://www.imooc.com/course/list?page=1')
     for cls in classes:
         print cls.tostring()
     titles = c.getTitles(2, 405)
     for title in titles:
         print title.tostring()
-    titles = c.getTitles(4, 373)
+    titles = c.getTitles(4, 471)
     for title in titles:
         print title.tostring()
