@@ -17,8 +17,8 @@ class Crawler:
             'Referer' : hosturl
         }
         postData = {
-            'username' : 'yourusername',
-            'password' : 'yourpassword',
+            'username' : 'channingbreeze@163.com',
+            'password' : 'hao1lie2July',
             'remember' : '1'
         }
         postData = urllib.urlencode(postData)
@@ -43,7 +43,7 @@ class Crawler:
         return classes
     def getTitles(self, cid, mid):
         url = 'http://www.imooc.com/learn/%d' % (mid)
-        chapterReg = '<div class="chapter chapter-active " ><h3><span>-</span><strong><i class="state-expand"></i>(.*?)(\d+)(.*?)</strong></h3>(.*?)</div>'
+        chapterReg = '<div class="chapter (?:.*?)" ><h3><span class="icon-(?:.*?)"></span><strong><i class="state-(?:.*?)"></i>(.*?)(\d+)(.*?)</strong></h3>(.*?)</div>'
         chapterReg = chapterReg.replace(' ', '')
         response = urllib2.urlopen(url)
         html = response.read()
@@ -74,9 +74,9 @@ if __name__ == '__main__':
     classes = c.getClasses('http://www.imooc.com/course/list?page=1')
     for cls in classes:
         print cls.tostring()
-    titles = c.getTitles(2, 405)
+    titles = c.getTitles(2, 491)
     for title in titles:
         print title.tostring()
-    titles = c.getTitles(4, 471)
+    titles = c.getTitles(4, 486)
     for title in titles:
         print title.tostring()
