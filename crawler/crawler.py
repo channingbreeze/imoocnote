@@ -29,7 +29,7 @@ class Crawler:
         response = urllib2.urlopen(url)
         html = response.read()
         html = html.replace(' ', '').replace('\r', '').replace('\n', '')
-        regstr = '<li class="course-one"><a href="/([^/]*?)/(\d*)" target="_self"><div class="course-list-img"><img width="240" height="135" alt="(.*?)" src="(.*?)"></div><h5><span>(.*?)</span></h5><div class="tips"><p class="text-ellipsis">(.*?)</p><span class="(?:.*?)">(.*?)</span><span class="l ml20">(.*?)</span></div><span class="time-label">(.*?)</span><b class="follow-label">(.*?)</b></a></li>';
+        regstr = '<li class="course-one"><a href="/([^/]*?)/(\d*)" target="_self"><div class="course-list-img"><img width="240" height="135" alt="(.*?)" src="(.*?)"></div><h5><span>(.*?)</span></h5><div class="tips"><p class="text-ellipsis">(.*?)</p><span class="(?:.*?)">(.*?)</span><span class="l ml20">(.*?)</span></div><span class="time-label">(.*?)\|((?:.*?))</span><b class="follow-label">(.*?)</b></a></li>';
         regstr = regstr.replace(' ', '')
         items = re.findall(regstr, html, re.S)
         classes = []
