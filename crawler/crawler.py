@@ -5,8 +5,10 @@ import cookielib
 import re
 from tClass import TClass
 from tTitle import TTitle
+from config import Config
 class Crawler:
     def login(self, hosturl, loginurl):
+        cfg = Config()
         cl = cookielib.CookieJar()
         cp = urllib2.HTTPCookieProcessor(cl)
         opener = urllib2.build_opener(cp)
@@ -17,8 +19,8 @@ class Crawler:
             'Referer' : hosturl
         }
         postData = {
-            'username' : 'channingbreeze@163.com',
-            'password' : 'hao1lie2July',
+            'username' : cfg.getuserinfo()['username'],
+            'password' : cfg.getuserinfo()['password'],
             'remember' : '1'
         }
         postData = urllib.urlencode(postData)
@@ -56,7 +58,7 @@ class Crawler:
             titles.extend(self.getSubTitles(item[3], cid, 0))
         return titles
     def getSubTitles(self, html, cid, pid):
-        titleReg = '<li>(?:<em class=".*?">.*?</em>)?<a target="_blank" href=\'/([^/]*?)/(\d+)\' class="(?:[a-z]*?)">(\d+)-(\d+) ([^<]*?)\((\d*):(\d*)\)<i class="(?:[a-z-]*?)"></i></a></li>|<li>(?:<em class=".*?">.*?</em>)?<a target="_blank" href=\'/([^/]*?)/(\d+)\' class="(?:[a-z]*?)">(\d+)-(\d+) ([^<]*?)<i class="(?:[a-z-]*?)"></i></a></li>'
+        titleReg = '<li>(?:<em class=".*?">.*?</em>)?<a target="_blank" href=\'/([^/]*?)/(\d+)\' class="(?:[A-Za-z-_]*?)">(\d+)-(\d+) ([^<]*?)\((\d*):(\d*)\)<i class="(?:[A-Za-z-]*?)"></i></a></li>|<li>(?:<em class=".*?">.*?</em>)?<a target="_blank" href=\'/([^/]*?)/(\d+)\' class="(?:[A-Za-z]-_*?)">(\d+)-(\d+) ([^<]*?)<i class="(?:[A-Za-z-]*?)"></i></a></li>'
         titleReg = titleReg.replace(' ', '')
         html = html.replace(' ', '').replace('\r', '').replace('\n', '').replace('\t', '')
         items = re.findall(titleReg, html, re.S)
@@ -77,6 +79,7 @@ if __name__ == '__main__':
     titles = c.getTitles(2, 491)
     for title in titles:
         print title.tostring()
+    print('------------------')
     titles = c.getTitles(4, 486)
     for title in titles:
         print title.tostring()
