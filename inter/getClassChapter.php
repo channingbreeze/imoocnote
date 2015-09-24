@@ -12,7 +12,7 @@ if(isset($_GET['cid'])) {
 }
 
 $sqlHelper = new SQLHelper();
-$sql = "select * from t_title where cid=" . $cid;
+$sql = "select * from t_title where cid=" . $cid . ' order by id';
 $arr = $sqlHelper->execute_dql_array($sql);
 
 $res = array();

@@ -80,6 +80,6 @@ if __name__ == '__main__':
     for title in titles:
         print title.tostring()
     print('------------------')
-    titles = c.getTitles(4, 486)
+    titles = c.getTitles(4, 509)
     for title in titles:
         print title.tostring()
