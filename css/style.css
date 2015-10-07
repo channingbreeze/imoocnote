@@ -207,6 +207,20 @@ li {
 .notediv .noteul li {
     margin-top: 20px;
     margin-bottom: 10px;
+    position: relative;
+}
+.notediv .noteul .operate {
+    position: absolute;
+    right: 10px;
+    top: 25px;
+}
+.notediv .noteul .operate a {
+    text-decoration: none;
+    color: gray;
+    font-size: 14px;
+}
+.notediv .noteul .operate a:hover {
+    text-decoration: underline;
 }
 .notediv .time {
     color: gray;
@@ -236,7 +250,7 @@ li {
     text-align: center;
 }
 .chapterdiv .noteBtn button {
-    width: 120px;
+    width: 80px;
     height: 40px;
     margin-left: 20px;
     margin-right: 20px;

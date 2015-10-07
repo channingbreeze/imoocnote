@@ -6,6 +6,8 @@
     var GETCLASSNOTE = 'http://imoocnote.calfnote.com/inter/getClassNote.php';
     var ADDNOTE = 'http://imoocnote.calfnote.com/inter/addClassNote.php';
     var SEARCHCLASSES = "http://imoocnote.calfnote.com/inter/searchClasses.php";
+    var UPDATENOTE = 'http://imoocnote.calfnote.com/inter/updateNote.php';
+    var DELETENOTE = 'http://imoocnote.calfnote.com/inter/deleteNote.php';
     
     var g_curPage = 1;
     var g_keyword = '';
@@ -77,36 +79,84 @@
         });
     };
     
+    function handleEditNote(type, cid, content, id) {
+        renderTemplate("#nodeedit-template", {cid: cid}, "#chapter");
+        renderTemplate("#notepre-template", {}, "#note");
+        CKEDITOR.replace('noteEditor');
+        CKEDITOR.instances.noteEditor.setData(content);
+        $("#previewNote").on('click', function(e){
+            var d = {};
+            d.notetime = new Date().getTime();
+            d.content = CKEDITOR.instances.noteEditor.getData();
+            renderTemplate("#notepre-template", d, "#note");
+        });
+        $("#submitNote").on('click', function(e){
+            var cid = $(this).data('id');
+            var content = CKEDITOR.instances.noteEditor.getData();
+            var inter;
+            var params;
+            if(type == 'add') {
+                inter = ADDNOTE;
+                params = {cid: cid, content: content};
+            } else if(type == 'update') {
+                inter = UPDATENOTE;
+                params = {id: id, content: content};
+            }
+            $.post(inter, params, function(data){
+                if(data == "success") {
+                    $.when($.getJSON(GETCLASSCHAPTER, 'cid='+cid),
+                       $.getJSON(GETCLASSNOTE, 'cid='+cid)
+                    ).done(function(cData, nData) {
+                        renderTemplate("#chapter-template", cData[0], "#chapter");
+                        renderTemplate("#note-template", nData[0], "#note");
+                        bindNoteEvent(cid);
+                    });
+                } else {
+                    window.alert("操作失败");
+                }
+            });
+        });
+        $("#cancelNote").on('click', function(e){
+            $.when($.getJSON(GETCLASSCHAPTER, 'cid='+cid),
+                   $.getJSON(GETCLASSNOTE, 'cid='+cid)
+            ).done(function(cData, nData) {
+                renderTemplate("#chapter-template", cData[0], "#chapter");
+                renderTemplate("#note-template", nData[0], "#note");
+                bindNoteEvent(cid);
+                showNote(true);
+            });
+        });
+    }
+    
     // 绑定记笔记事件
     function bindNoteEvent(cid) {
         $("#takeNoteBtn").on('click', function(e){
-            renderTemplate("#nodeedit-template", {cid: cid}, "#chapter");
-            renderTemplate("#notepre-template", {}, "#note");
-            CKEDITOR.replace('noteEditor');
-            $("#previewNote").on('click', function(e){
-                var d = {};
-                d.notetime = new Date().getTime();
-                d.content = CKEDITOR.instances.noteEditor.getData();
-                renderTemplate("#notepre-template", d, "#note");
-            });
-            $("#submitNote").on('click', function(e){
-                var cid = $(this).data('id');
-                var content = CKEDITOR.instances.noteEditor.getData();
-                $.post(ADDNOTE, {cid: cid, content: content}, function(data){
-                    if(data == "success") {
-                        $.when($.getJSON(GETCLASSCHAPTER, 'cid='+cid),
-                           $.getJSON(GETCLASSNOTE, 'cid='+cid)
-                        ).done(function(cData, nData) {
-                            renderTemplate("#chapter-template", cData[0], "#chapter");
-                            renderTemplate("#note-template", nData[0], "#note");
-                            bindNoteEvent(cid);
-                        });
-                    } else {
-                        window.alert("增加笔记失败");
-                    }
-                });
-                
-            });
+            handleEditNote('add', cid, '');
+        });
+        $("#note").find(".operate > a").on('click', function() {
+            $this = $(this);
+            var id = $this.data('id');
+            var content = $this.data('content');
+            if($this.html() == "编辑") {
+                handleEditNote('update', cid, content, id);
+            } else if($this.html() == "删除") {
+                var res = window.confirm("是否确认删除？");
+                if(res) {
+                    $.post(DELETENOTE, {id: id}, function(data){
+                        if(data == "success") {
+                            $.when($.getJSON(GETCLASSCHAPTER, 'cid='+cid),
+                               $.getJSON(GETCLASSNOTE, 'cid='+cid)
+                            ).done(function(cData, nData) {
+                                renderTemplate("#chapter-template", cData[0], "#chapter");
+                                renderTemplate("#note-template", nData[0], "#note");
+                                bindNoteEvent(cid);
+                            });
+                        } else {
+                            window.alert("操作失败");
+                        }
+                    });
+                }
+            }
         });
     };
     

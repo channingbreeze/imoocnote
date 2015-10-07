@@ -67,6 +67,10 @@ if(!isset($_SESSION['user'])) {
             {{#each this}}
             <li>
                 <div class="time">{{formatDate notetime}}</div>
+                <div class="operate">
+                    <a href="javascript:void(0);" data-id="{{id}}" data-content="{{content}}">编辑</a>
+                    <a href="javascript:void(0);" data-id="{{id}}">删除</a>
+                </div>
                 <div class="content">
                     {{{content}}}
                 </div>
@@ -84,6 +88,7 @@ if(!isset($_SESSION['user'])) {
         <div>
             <div class="noteBtn">
                 <button id="previewNote">预览</button>
+                <button id="cancelNote">取消</button>
                 <button id="submitNote" data-id="{{cid}}">提交</button>
             </div>
         </div>
