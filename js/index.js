@@ -5,8 +5,10 @@
     var GETCLASSCHAPTER = 'http://imoocnote.calfnote.com/inter/getClassChapter.php';
     var GETCLASSNOTE = 'http://imoocnote.calfnote.com/inter/getClassNote.php';
     var ADDNOTE = 'http://imoocnote.calfnote.com/inter/addClassNote.php';
+    var SEARCHCLASSES = "http://imoocnote.calfnote.com/inter/searchClasses.php";
     
     var g_curPage = 1;
+    var g_keyword = '';
     
     // 全局ajax失败处理
     $.ajaxSetup({
@@ -29,7 +31,7 @@
         } else {
             $(".overlap").css('display', 'none');
             $(".notedetail").css('display', 'none');
-            refreshClasses(g_curPage);
+            searchClasses(g_curPage, g_keyword);
         }
     };
     
@@ -43,7 +45,6 @@
     // 更新课程列表
     function refreshClasses(curPage) {
         $.getJSON(GETCLASSES, 'curPage='+curPage, function(data){
-            g_curPage = curPage;
             renderTemplate("#class-template", data.data, "#classes");
             renderTemplate("#pag-template", formatPag(data), "#pag");
             bindClassEvent();
@@ -71,7 +72,8 @@
     function bindPageEvent() {
         $("#pag").find('li.clickable').on('click', function(e){
             $this = $(this);
-            refreshClasses($this.data('id'));
+            g_curPage = $this.data('id');
+            searchClasses(g_curPage, g_keyword);
         });
     };
     
@@ -246,5 +248,31 @@
     });
     
     refreshClasses(1);
+    
+    // 搜索课程列表
+    function searchClasses(curPage, keyword) {
+        $.getJSON(SEARCHCLASSES, 'curPage='+curPage + '&keyword=' + keyword, function(data){
+            g_curPage = curPage;
+            renderTemplate("#class-template", data.data, "#classes");
+            renderTemplate("#pag-template", formatPag(data), "#pag");
+            bindClassEvent();
+            bindPageEvent();
+        });
+    };
+    
+    var t;
+    $("#searchInput").on('keydown', function() {
+        $this = $(this);
+        if(t) {
+            clearTimeout(t);
+            t = null;
+        }
+        t = setTimeout(function() {
+            g_keyword = $this.val();
+            searchClasses(1, g_keyword);
+            clearTimeout(t);
+            t = null;
+        } ,500);
+    });
     
 })(jQuery);

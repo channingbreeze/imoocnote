@@ -22,6 +22,19 @@ li {
     color: #6A6A6A;
     margin-left: 20px;
 }
+.search {
+    margin-top: 30px;
+    height: 30px;
+}
+.search input[type="text"] {
+    float: right;
+    height: 30px;
+    width: 400px;
+    margin-right: 60px;
+    border-radius: 10px;
+    outline: none;
+    padding-left: 10px;
+}
 .classes, .pag {
     min-width: 1000px;
     margin: 0px auto;
