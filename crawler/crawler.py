@@ -58,7 +58,6 @@ class Crawler:
             titles.extend(self.getSubTitles(item[3], cid, 0))
         return titles
     def getSubTitles(self, html, cid, pid):
-        print html
         titleReg = '<li>(?:<em class=".*?">.*?</em>)?<a target="_blank" href=\'/([^/]*?)/(\d+)\' class="(?:[A-Za-z-_]*?)">(\d+)-(\d+) ([^<]*?)\((\d*):(\d*)\)<i class="(?:[A-Za-z-_]*?)"></i></a></li>|<li>(?:<em class=".*?">.*?</em>)?<a target="_blank" href=\'/([^/]*?)/(\d+)\' class="(?:[A-Za-z-_]*?)">(\d+)-(\d+) ([^<]*?)<i class="(?:[A-Za-z-_]*?)"></i></a></li>'
         titleReg = titleReg.replace(' ', '')
         html = html.replace(' ', '').replace('\r', '').replace('\n', '').replace('\t', '')
