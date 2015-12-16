@@ -58,7 +58,8 @@ class Crawler:
             titles.extend(self.getSubTitles(item[3], cid, 0))
         return titles
     def getSubTitles(self, html, cid, pid):
-        titleReg = '<li>(?:<em class=".*?">.*?</em>)?<a target="_blank" href=\'/([^/]*?)/(\d+)\' class="(?:[A-Za-z-_]*?)">(\d+)-(\d+) ([^<]*?)\((\d*):(\d*)\)<i class="(?:[A-Za-z-]*?)"></i></a></li>|<li>(?:<em class=".*?">.*?</em>)?<a target="_blank" href=\'/([^/]*?)/(\d+)\' class="(?:[A-Za-z]-_*?)">(\d+)-(\d+) ([^<]*?)<i class="(?:[A-Za-z-]*?)"></i></a></li>'
+        print html
+        titleReg = '<li>(?:<em class=".*?">.*?</em>)?<a target="_blank" href=\'/([^/]*?)/(\d+)\' class="(?:[A-Za-z-_]*?)">(\d+)-(\d+) ([^<]*?)\((\d*):(\d*)\)<i class="(?:[A-Za-z-_]*?)"></i></a></li>|<li>(?:<em class=".*?">.*?</em>)?<a target="_blank" href=\'/([^/]*?)/(\d+)\' class="(?:[A-Za-z-_]*?)">(\d+)-(\d+) ([^<]*?)<i class="(?:[A-Za-z-_]*?)"></i></a></li>'
         titleReg = titleReg.replace(' ', '')
         html = html.replace(' ', '').replace('\r', '').replace('\n', '').replace('\t', '')
         items = re.findall(titleReg, html, re.S)
@@ -76,10 +77,10 @@ if __name__ == '__main__':
     classes = c.getClasses('http://www.imooc.com/course/list?page=1')
     for cls in classes:
         print cls.tostring()
-    titles = c.getTitles(2, 491)
+    titles = c.getTitles(2, 545)
     for title in titles:
         print title.tostring()
     print('------------------')
-    titles = c.getTitles(4, 509)
+    titles = c.getTitles(4, 559)
     for title in titles:
         print title.tostring()
